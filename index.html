@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrackSpark — Habit Tracker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- ===================== SIGN-IN PAGE ===================== -->
+    <div id="signinPage">
+      <!-- Left: art / illustration panel -->
+      <div class="si-art">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+        <div class="si-art-inner">
+          <div class="art-logo">TRACKSPARK</div>
+          <div class="art-tag">
+            Build habits that stick.<br />Track every win, every day.
+          </div>
+          <div class="art-stats">
+            <div class="asc">
+              <div
+                class="asc-val"
+                style="
+                  background: var(--grad-hero);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                "
+              >
+                87%
+              </div>
+              <div class="asc-lbl">Completion</div>
+            </div>
+            <div class="asc">
+              <div
+                class="asc-val"
+                style="
+                  background: var(--grad-cool);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                "
+              >
+                21
+              </div>
+              <div class="asc-lbl">Day Streak</div>
+            </div>
+            <div class="asc">
+              <div
+                class="asc-val"
+                style="
+                  background: var(--grad-lav);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                "
+              >
+                9
+              </div>
+              <div class="asc-lbl">Habits</div>
+            </div>
+          </div>
+          <div class="art-preview">
+            <div class="ap-row">
+              <div class="mchk done">✓</div>
+              🌅 Wake Up Early (10am)
+            </div>
+            <div class="ap-row">
+              <div class="mchk done">✓</div>
+              🏃 Morning Cardio
+            </div>
+            <div class="ap-row">
+              <div class="mchk done">✓</div>
+              💻 Project Work
+            </div>
+            <div class="ap-row">
+              <div class="mchk todo"></div>
+              📵 Offline Hours
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: sign-in / sign-up form -->
+      <div class="si-form">
+        <div class="form-box">
+          <div class="fg-sub">Welcome back</div>
+          <h2 class="fg-h">Sign in to<br />your tracker</h2>
+          <p class="fg-p">Your habits. Your progress. Your story.</p>
+
+          <div class="ftabs">
+            <button class="ftab active" onclick="switchFTab('in', this)">
+              Sign In
+            </button>
+            <button class="ftab" onclick="switchFTab('up', this)">
+              Create Account
+            </button>
+          </div>
+
+          <!-- Sign-in fields -->
+          <div id="inFields">
+            <label class="fl">Email Address</label>
+            <input
+              class="fi"
+              type="email"
+              id="siEmail"
+              placeholder="you@example.com"
+            />
+            <label class="fl">Password</label>
+            <input
+              class="fi"
+              type="password"
+              id="siPass"
+              placeholder="••••••••"
+            />
+            <button class="btn-main" onclick="handleSignin()">
+              Continue →
+            </button>
+          </div>
+
+          <!-- Sign-up fields -->
+          <div id="upFields" style="display: none">
+            <label class="fl">Your Name</label>
+            <input
+              class="fi"
+              type="text"
+              id="suName"
+              placeholder="Alex Johnson"
+            />
+            <label class="fl">Email Address</label>
+            <input
+              class="fi"
+              type="email"
+              id="suEmail"
+              placeholder="you@example.com"
+            />
+            <label class="fl">Password</label>
+            <input
+              class="fi"
+              type="password"
+              id="suPass"
+              placeholder="Create a password"
+            />
+            <button class="btn-main" onclick="handleSignup()">
+              Create Account →
+            </button>
+          </div>
+
+          <div class="divider">or</div>
+          <button class="btn-ghost" onclick="enterGuest()">
+            Continue as Guest
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- end #signinPage -->
+
+    <!-- ===================== MAIN APP ===================== -->
+    <div id="appPage">
+      <!-- TRACKSPARK header -->
+      <div class="app-hdr">
+        <div class="hdr-logo">TrackSpark</div>
+        <div class="hdr-r">
+          <!-- Month navigation -->
+          <div class="mnav">
+            <button class="mnbtn" onclick="changeMonth(-1)">‹</button>
+            <span class="mnlbl" id="monthLabel">January 2026</span>
+            <button class="mnbtn" onclick="changeMonth(1)">›</button>
+          </div>
+          <!-- View switcher -->
+          <div class="vsw">
+            <button class="vb active" onclick="switchView('monthly', this)">
+              Monthly
+            </button>
+            <button class="vb" onclick="switchView('weekly', this)">
+              Weekly
+            </button>
+          </div>
+          <!-- Add habit -->
+          <button class="btn-add" onclick="openModal()">＋ Add Habit</button>
+          <!-- User pill -->
+          <div class="upill">
+            <div class="uav" id="uav">G</div>
+            <span class="unm" id="unm">Guest</span>
+          </div>
+          <button class="btn-out" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+      <!-- end .app-hdr -->
+
+      <div class="app-body">
+        <!-- Hero progress bar -->
+        <div class="hero-prog fu" style="animation-delay: 0.05s">
+          <div class="hp-s">
+            <div
+              class="hp-v"
+              id="hpD"
+              style="
+                background: var(--grad-cool);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              "
+            >
+              0
+            </div>
+            <div class="hp-l">Completed</div>
+          </div>
+          <div class="hpdiv"></div>
+          <div class="hp-s">
+            <div class="hp-v" id="hpT" style="color: var(--txt2)">0</div>
+            <div class="hp-l">Possible</div>
+          </div>
+          <div class="hpdiv"></div>
+          <div class="hp-bar">
+            <div class="hp-bt">
+              <span class="hp-bt-t">Monthly Progress</span>
+              <span class="hp-pct" id="hpP">0%</span>
+            </div>
+            <div class="hp-track">
+              <div class="hp-fill" id="hpF" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="hpdiv"></div>
+          <div class="hp-stk">
+            <div class="hp-si">🔥</div>
+            <div>
+              <div class="hp-sn" id="hpS">0</div>
+              <div class="hp-sl">Best Streak</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MONTHLY VIEW ── -->
+        <div
+          id="monthlyView"
+          class="monthly-wrap fu"
+          style="animation-delay: 0.12s"
+        >
+          <div class="grid-outer">
+            <table class="gt" id="habitGrid"></table>
+          </div>
+          <div class="ag">
+            <div class="ac fu" style="animation-delay: 0.2s">
+              <div class="ac-t"><span>📊</span> Habit Analysis</div>
+              <div class="ath">
+                <span class="athc">Habit</span>
+                <span class="athc" style="text-align: center">Goal</span>
+                <span class="athc" style="text-align: center">Done</span>
+                <span class="athc" style="text-align: center">Progress</span>
+              </div>
+              <div id="aRows"></div>
+            </div>
+            <div class="ac fu" style="animation-delay: 0.28s">
+              <div class="ac-t"><span>⚡</span> Month Stats</div>
+              <div class="sg" id="sGrid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── WEEKLY VIEW ── -->
+        <div id="weeklyView" style="display: none">
+          <!-- Week navigation -->
+          <div class="wk-topbar">
+            <div class="wk-nav">
+              <button class="wk-nav-btn" onclick="changeWeek(-1)">‹</button>
+              <span class="wk-range" id="wkRange">—</span>
+              <button class="wk-nav-btn" onclick="changeWeek(1)">›</button>
+            </div>
+            <button class="wk-today-btn" onclick="jumpWeekToday()">
+              Today
+            </button>
+          </div>
+
+          <!-- Week hero: big ring + 4 floating circles + text stats -->
+          <div class="wk-hero">
+            <!-- Big central ring -->
+            <div class="wk-ring-wrap">
+              <svg
+                id="wkBigRingSvg"
+                width="130"
+                height="130"
+                viewBox="0 0 130 130"
+              >
+                <circle
+                  fill="none"
+                  stroke="var(--bg3)"
+                  stroke-width="10"
+                  cx="65"
+                  cy="65"
+                  r="52"
+                />
+                <circle
+                  id="wkBigRingProg"
+                  fill="none"
+                  stroke="url(#wkGrad)"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  cx="65"
+                  cy="65"
+                  r="52"
+                  stroke-dasharray="326.73"
+                  stroke-dashoffset="326.73"
+                  transform="rotate(-90 65 65)"
+                  style="
+                    transition: stroke-dashoffset 0.9s
+                      cubic-bezier(0.4, 0, 0.2, 1);
+                  "
+                />
+                <defs>
+                  <linearGradient
+                    id="wkGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#FF6B6B" />
+                    <stop offset="50%" stop-color="#FF8E53" />
+                    <stop offset="100%" stop-color="#FFD166" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="wk-ring-inner">
+                <div class="wk-ring-pct" id="wkBigPct">0%</div>
+                <div class="wk-ring-lbl">Week</div>
+              </div>
+            </div>
+
+            <!-- 4 floating stat circles -->
+            <div class="wk-stats-float">
+              <div class="wkf-stat">
+                <div class="wkf-circle">
+                  <svg width="76" height="76" viewBox="0 0 76 76">
+                    <circle
+                      fill="none"
+                      stroke="var(--bg3)"
+                      stroke-width="5"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                    />
+                    <circle
+                      id="wkFC1"
+                      fill="none"
+                      stroke="#43E6B5"
+                      stroke-width="5"
+                      stroke-linecap="round"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                      stroke-dasharray="188.5"
+                      stroke-dashoffset="188.5"
+                      transform="rotate(-90 38 38)"
+                      style="transition: stroke-dashoffset 0.8s ease"
+                    />
+                  </svg>
+                  <div class="wkf-circle-inner">
+                    <div class="wkf-num" id="wkFN1" style="color: var(--mint)">
+                      0
+                    </div>
+                  </div>
+                </div>
+                <div class="wkf-lbl">Done</div>
+              </div>
+
+              <div class="wkf-stat">
+                <div class="wkf-circle">
+                  <svg width="76" height="76" viewBox="0 0 76 76">
+                    <circle
+                      fill="none"
+                      stroke="var(--bg3)"
+                      stroke-width="5"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                    />
+                    <circle
+                      id="wkFC2"
+                      fill="none"
+                      stroke="#FF6B6B"
+                      stroke-width="5"
+                      stroke-linecap="round"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                      stroke-dasharray="188.5"
+                      stroke-dashoffset="0"
+                      transform="rotate(-90 38 38)"
+                      style="transition: stroke-dashoffset 0.8s ease"
+                    />
+                  </svg>
+                  <div class="wkf-circle-inner">
+                    <div class="wkf-num" id="wkFN2" style="color: var(--coral)">
+                      0
+                    </div>
+                  </div>
+                </div>
+                <div class="wkf-lbl">Missed</div>
+              </div>
+
+              <div class="wkf-stat">
+                <div class="wkf-circle">
+                  <svg width="76" height="76" viewBox="0 0 76 76">
+                    <circle
+                      fill="none"
+                      stroke="var(--bg3)"
+                      stroke-width="5"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                    />
+                    <circle
+                      id="wkFC3"
+                      fill="none"
+                      stroke="#FFD166"
+                      stroke-width="5"
+                      stroke-linecap="round"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                      stroke-dasharray="188.5"
+                      stroke-dashoffset="188.5"
+                      transform="rotate(-90 38 38)"
+                      style="transition: stroke-dashoffset 0.8s ease"
+                    />
+                  </svg>
+                  <div class="wkf-circle-inner">
+                    <div class="wkf-num" id="wkFN3" style="color: var(--gold)">
+                      0
+                    </div>
+                  </div>
+                </div>
+                <div class="wkf-lbl">Perfect Days</div>
+              </div>
+
+              <div class="wkf-stat">
+                <div class="wkf-circle">
+                  <svg width="76" height="76" viewBox="0 0 76 76">
+                    <circle
+                      fill="none"
+                      stroke="var(--bg3)"
+                      stroke-width="5"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                    />
+                    <circle
+                      id="wkFC4"
+                      fill="none"
+                      stroke="#A78BFA"
+                      stroke-width="5"
+                      stroke-linecap="round"
+                      cx="38"
+                      cy="38"
+                      r="30"
+                      stroke-dasharray="188.5"
+                      stroke-dashoffset="188.5"
+                      transform="rotate(-90 38 38)"
+                      style="transition: stroke-dashoffset 0.8s ease"
+                    />
+                  </svg>
+                  <div class="wkf-circle-inner">
+                    <div
+                      class="wkf-num"
+                      id="wkFN4"
+                      style="color: var(--lavender)"
+                    >
+                      0
+                    </div>
+                  </div>
+                </div>
+                <div class="wkf-lbl">Best Streak</div>
+              </div>
+            </div>
+            <!-- end .wk-stats-float -->
+
+            <div class="wk-vdiv"></div>
+
+            <!-- Text stats panel -->
+            <div class="wk-text-stats" id="wkTextStats"></div>
+          </div>
+          <!-- end .wk-hero -->
+
+          <!-- 7 day columns (rendered by JS) -->
+          <div class="wk-days-grid" id="wkDaysGrid"></div>
+
+          <!-- Per-habit analysis + weekly circles -->
+          <div class="wk-analysis">
+            <div class="wka-card">
+              <div class="wka-title">📊 Habit Breakdown</div>
+              <div id="wkHabitBreakdown"></div>
+            </div>
+            <div class="wka-card">
+              <div class="wka-title">🔵 Weekly Circles</div>
+              <div class="wk-circ-row" id="wkCircRow"></div>
+            </div>
+          </div>
+        </div>
+        <!-- end #weeklyView -->
+      </div>
+      <!-- end .app-body -->
+
+      <!-- ── FOOTER ── -->
+      <footer class="app-footer">
+        <div class="footer-inner">
+          <!-- Motivational quote -->
+          <div class="footer-quote">
+            <div class="fq-emoji">💬</div>
+            <div>
+              <div class="fq-text" id="footerQuote">
+                "We are what we repeatedly do. Excellence, then, is not an act,
+                but a habit."
+              </div>
+              <div class="fq-author" id="footerAuthor">— Aristotle</div>
+            </div>
+          </div>
+
+          <!-- 4-column grid -->
+          <div class="footer-top">
+            <!-- Brand + live rings -->
+            <div class="footer-brand">
+              <div class="footer-logo">TRACKSPARK</div>
+              <div class="footer-tagline">
+                Build powerful habits, track every win, and become the best
+                version of yourself — one day at a time.
+              </div>
+              <div class="footer-rings" id="footerRings"></div>
+            </div>
+
+            <!-- Tracker links -->
+            <div>
+              <div class="footer-col-title">Tracker</div>
+              <ul class="footer-links">
+                <li>
+                  <button
+                    onclick="
+                      switchView('monthly', document.querySelectorAll('.vb')[0])
+                    "
+                  >
+                    <span class="fl-icon">📅</span>Monthly View
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onclick="
+                      switchView('weekly', document.querySelectorAll('.vb')[1])
+                    "
+                  >
+                    <span class="fl-icon">📆</span>Weekly View
+                  </button>
+                </li>
+                <li>
+                  <button onclick="openModal()">
+                    <span class="fl-icon">＋</span>Add New Habit
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+                  >
+                    <span class="fl-icon">🔝</span>Back to Top
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Quick tips -->
+            <div>
+              <div class="footer-col-title">Quick Tips</div>
+              <ul class="footer-links">
+                <li>
+                  <a href="#"><span class="fl-icon">🌅</span>Start small</a>
+                </li>
+                <li>
+                  <a href="#"><span class="fl-icon">⏰</span>Be consistent</a>
+                </li>
+                <li>
+                  <a href="#"
+                    ><span class="fl-icon">🔥</span>Never miss twice</a
+                  >
+                </li>
+                <li>
+                  <a href="#"><span class="fl-icon">📊</span>Review weekly</a>
+                </li>
+                <li>
+                  <a href="#"><span class="fl-icon">🎯</span>Set clear goals</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Account -->
+            <div>
+              <div class="footer-col-title">Account</div>
+              <ul class="footer-links">
+                <li>
+                  <button onclick="logout()">
+                    <span class="fl-icon">🔐</span>Sign Out
+                  </button>
+                </li>
+                <li>
+                  <button onclick="openModal()">
+                    <span class="fl-icon">✏️</span>Manage Habits
+                  </button>
+                </li>
+                <li>
+                  <a href="#"><span class="fl-icon">🌙</span>Dark Mode (on)</a>
+                </li>
+                <li>
+                  <a href="#"><span class="fl-icon">💾</span>Data is local</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- end .footer-top -->
+
+          <!-- Bottom bar -->
+          <div class="footer-bottom">
+            <div class="footer-copy">
+              Built By <span>Sourav</span> · TRACKSPARK ©
+              <span id="footerYear"></span> · Your data stays on your device
+            </div>
+            <div class="footer-badges">
+              <div class="fbadge">
+                <div class="fbadge-dot" style="background: var(--mint)"></div>
+                100% Offline
+              </div>
+              <div class="fbadge">
+                <div class="fbadge-dot" style="background: var(--gold)"></div>
+                No Ads
+              </div>
+              <div class="fbadge">
+                <div
+                  class="fbadge-dot"
+                  style="background: var(--lavender)"
+                ></div>
+                Private
+              </div>
+            </div>
+            <button
+              class="footer-top-btn"
+              onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+              title="Back to top"
+            >
+              ↑
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- end #appPage -->
+
+    <!-- ── ADD HABIT MODAL ── -->
+    <div class="mo" id="mo">
+      <div class="mb">
+        <h2>New Habit</h2>
+        <p>What do you want to stay consistent with?</p>
+        <label class="ml">Habit Name</label>
+        <input
+          class="mi"
+          type="text"
+          id="hni"
+          placeholder="e.g. Morning Meditation"
+        />
+        <label class="ml">Pick an Emoji</label>
+        <div class="eg" id="eg"></div>
+        <div class="mact">
+          <button class="btn-mc" onclick="closeModal()">Cancel</button>
+          <button class="btn-ms" onclick="saveHabit()">Add Habit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- External JS — loaded last so DOM is ready -->
+    <script src="js/script.js"></script>
+  </body>
+</html>
