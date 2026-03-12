@@ -40,7 +40,8 @@ CSS3	Styling and layout
 JavaScript (Vanilla JS)	Application logic and habit tracking
 Google Fonts	Typography
 # 📂 Project Structure
-<img width="512" height="301" alt="image" src="https://github.com/user-attachments/assets/fb14713d-6cd9-4c8a-9918-c207d56ce125" />
+<img width="479" height="283" alt="image" src="https://github.com/user-attachments/assets/defad44d-3eb6-4aec-8cfc-eceb1b1169cd" />
+
 
 
 
